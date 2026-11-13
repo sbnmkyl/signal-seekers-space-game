@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#07142e">
+  <meta name="description" content="Ay, Mars ve derin uzaydaki sessiz robotik kaşiflerin anılarını uyandırdığın iki dilli, animasyonlu bir bilim macerası.">
+  <title>Signal Seekers · Sinyal Avcıları</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <canvas id="sky" aria-hidden="true"></canvas>
+  <div class="nebula nebula-a" aria-hidden="true"></div>
+  <div class="nebula nebula-b" aria-hidden="true"></div>
+
+  <a class="skip-link" href="#main">İçeriğe geç / Skip to content</a>
+
+  <header class="topbar" aria-label="Game controls">
+    <button class="brand mini-logo" id="home-btn" type="button" aria-label="Ana ekran / Home">
+      <span class="brand-orbit" aria-hidden="true">✦</span>
+      <span data-i18n="shortTitle">Sinyal Avcıları</span>
+    </button>
+    <div class="status-cluster" aria-label="Game status">
+      <div class="spark-counter" title="Science Sparks">
+        <span aria-hidden="true">✦</span>
+        <strong id="spark-count">0</strong><span class="sr-only" data-i18n="sparksLabel">bilim kıvılcımı</span>
+      </div>
+      <div class="progress-pill" aria-label="Progress">
+        <span class="progress-dots" id="progress-dots" aria-hidden="true"></span>
+        <span id="progress-text">0/5</span>
+      </div>
+    </div>
+    <nav class="utility-nav" aria-label="Quick controls">
+      <button class="icon-btn" id="map-btn" type="button" data-tooltip-tr="Harita" data-tooltip-en="Map" aria-label="Harita / Map">⌖</button>
+      <button class="icon-btn" id="archive-btn" type="button" data-tooltip-tr="Kozmik Müze" data-tooltip-en="Cosmic Museum" aria-label="Kozmik Müze / Cosmic Museum">▦</button>
+      <button class="icon-btn" id="sound-btn" type="button" aria-pressed="false" data-tooltip-tr="Sesi aç" data-tooltip-en="Sound on" aria-label="Sesi aç / Sound on">♪</button>
+      <button class="icon-btn" id="motion-btn" type="button" aria-pressed="false" data-tooltip-tr="Hareketi azalt" data-tooltip-en="Reduce motion" aria-label="Hareketi azalt / Reduce motion">≈</button>
+      <div class="language-switch" role="group" aria-label="Dil / Language">
+        <button type="button" class="lang-btn active" data-lang="tr" aria-pressed="true">TR</button>
+        <button type="button" class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="screen start-screen active" id="start-screen" aria-labelledby="start-title">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="pulse-dot" aria-hidden="true"></span><span data-i18n="incoming">2060 · KAYIP SİNYAL ALGILANDI</span></p>
+        <h1 id="start-title">
+          <span data-i18n="heroLine1">Sessizlik</span>
+          <em data-i18n="heroLine2">unutulmak değildir.</em>
+        </h1>
+        <p class="hero-lede" data-i18n="heroLede">Ay, Mars ve derin uzaydaki robotik kaşiflerin anıları sönüyor. Minik yıldız tamircisi Piko ile sinyallerini bul, bilimlerini yeniden canlandır.</p>
+        <div class="hero-actions">
+          <button class="primary-btn magnetic" id="start-btn" type="button">
+            <span data-i18n="begin">Maceraya Başla</span><span aria-hidden="true">→</span>
+          </button>
+          <button class="text-btn" id="how-btn" type="button"><span aria-hidden="true">◎</span> <span data-i18n="howTo">Nasıl oynanır?</span></button>
+        </div>
+        <div class="hero-facts" aria-label="Game information">
+          <span><strong>5</strong> <span data-i18n="missions">görev</span></span>
+          <span><strong>2</strong> <span data-i18n="languages">dil</span></span>
+          <span><strong>∞</strong> <span data-i18n="curiosity">merak</span></span>
+        </div>
+      </div>
+
+      <div class="hero-visual" aria-label="Piko, the signal repair robot">
+        <div class="signal-rings" aria-hidden="true"><i></i><i></i><i></i></div>
+        <div class="piko-wrap">
+          <div class="piko-shadow" aria-hidden="true"></div>
+          <div class="piko" id="piko">
+            <div class="piko-antenna"><span></span></div>
+            <div class="piko-ear piko-ear-left"></div>
+            <div class="piko-ear piko-ear-right"></div>
+            <div class="piko-head">
+              <div class="piko-face">
+                <span class="eye eye-left"></span><span class="eye eye-right"></span>
+                <span class="piko-mouth"></span>
+              </div>
+            </div>
+            <div class="piko-arm arm-left"></div><div class="piko-arm arm-right"></div>
+            <div class="piko-body"><span class="piko-core">✦</span></div>
+            <div class="piko-thruster"><i></i><i></i><i></i></div>
+          </div>
+          <div class="speech-bubble">
+            <span class="radio-label">PIKO // 88.7 MHz</span>
+            <p data-i18n="pikoHello">“Bip! Beş cesur kaşif bizi bekliyor. Onlara bir ses verelim mi?”</p>
+          </div>
+        </div>
+        <div class="floating-badge badge-moon" aria-hidden="true"><span>☾</span><small>MOON</small></div>
+        <div class="floating-badge badge-mars" aria-hidden="true"><span>●</span><small>MARS</small></div>
+        <div class="floating-badge badge-deep" aria-hidden="true"><span>⌁</span><small>DEEP SPACE</small></div>
+      </div>
+    </section>
+
+    <section class="screen map-screen" id="map-screen" aria-labelledby="map-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow"><span class="pulse-dot" aria-hidden="true"></span><span data-i18n="memoryNetwork">KOZMİK HAFIZA AĞI</span></p>
+          <h2 id="map-title" data-i18n="chooseSignal">Bir sinyal seç, bir anıyı uyandır.</h2>
+          <p data-i18n="mapHelp">Görevleri istediğin sırayla oynayabilirsin. Her kaşif sana üç Bilim Kıvılcımı bırakır.</p>
+        </div>
+        <div class="legacy-meter" aria-label="Legacy meter">
+          <div class="meter-label"><span data-i18n="legacy">Miras Sinyali</span><strong id="legacy-percent">0%</strong></div>
+          <div class="meter-track"><i id="legacy-fill"></i></div>
+        </div>
+      </div>
+
+      <div class="mission-map" id="mission-map">
+        <svg class="map-lines" viewBox="0 0 1200 620" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M140,300 C280,120 410,130 535,260 S780,500 925,340 S1060,180 1140,270" />
+          <path class="signal-path" d="M140,300 C280,120 410,130 535,260 S780,500 925,340 S1060,180 1140,270" />
+        </svg>
+        <article class="mission-node moon-node" data-mission="moon" style="--x:9%;--y:42%;--delay:0s">
+          <button type="button" class="planet-button" aria-describedby="moon-desc">
+            <span class="planet moon-planet"><i class="crater c1"></i><i class="crater c2"></i><i class="crater c3"></i></span>
+            <span class="node-status" aria-hidden="true">01</span>
+          </button>
+          <div class="node-card"><span class="node-kicker">MOON · 1971</span><h3 data-i18n="moonTitle">Lazer Köprüsü</h3><p id="moon-desc" data-i18n="moonMapDesc">LRV & Ay aynaları</p><span class="completion-mark" aria-hidden="true">✓</span></div>
+        </article>
+        <article class="mission-node oppy-node" data-mission="opportunity" style="--x:30%;--y:17%;--delay:.3s">
+          <button type="button" class="planet-button" aria-describedby="opportunity-desc">
+            <span class="planet mars-planet"><i></i><i></i></span><span class="tiny-rover" aria-hidden="true">▰</span>
+            <span class="node-status" aria-hidden="true">02</span>
+          </button>
+          <div class="node-card"><span class="node-kicker">MARS · 2004</span><h3 data-i18n="oppyTitle">Suyun İzleri</h3><p id="opportunity-desc" data-i18n="oppyMapDesc">Opportunity</p><span class="completion-mark" aria-hidden="true">✓</span></div>
+        </article>
+        <article class="mission-node ingenuity-node" data-mission="ingenuity" style="--x:47%;--y:47%;--delay:.6s">
+          <button type="button" class="planet-button" aria-describedby="ingenuity-desc">
+            <span class="planet atmosphere-planet"><i class="rotor"></i><b></b></span>
+            <span class="node-status" aria-hidden="true">03</span>
+          </button>
+          <div class="node-card"><span class="node-kicker">MARS SKY · 2021</span><h3 data-i18n="ingenuityTitle">İmkânsız Uçuş</h3><p id="ingenuity-desc" data-i18n="ingenuityMapDesc">Ingenuity</p><span class="completion-mark" aria-hidden="true">✓</span></div>
+        </article>
+        <article class="mission-node insight-node" data-mission="insight" style="--x:69%;--y:67%;--delay:.9s">
+          <button type="button" class="planet-button" aria-describedby="insight-desc">
+            <span class="planet quake-planet"><i></i><b>⌁</b></span>
+            <span class="node-status" aria-hidden="true">04</span>
+          </button>
+          <div class="node-card"><span class="node-kicker">MARS · 2018</span><h3 data-i18n="insightTitle">Mars’ın Kalbi</h3><p id="insight-desc" data-i18n="insightMapDesc">InSight</p><span class="completion-mark" aria-hidden="true">✓</span></div>
+        </article>
+        <article class="mission-node pioneer-node" data-mission="pioneer" style="--x:88%;--y:37%;--delay:1.2s">
+          <button type="button" class="planet-button" aria-describedby="pioneer-desc">
+            <span class="planet deep-planet"><i class="dish"></i><b>✦</b></span>
+            <span class="node-status" aria-hidden="true">05</span>
+          </button>
+          <div class="node-card"><span class="node-kicker">DEEP SPACE · 1972</span><h3 data-i18n="pioneerTitle">Yıldızlara Mektup</h3><p id="pioneer-desc" data-i18n="pioneerMapDesc">Pioneer 10</p><span class="completion-mark" aria-hidden="true">✓</span></div>
+        </article>
+        <div class="map-piko" aria-hidden="true"><span>✦</span></div>
+      </div>
+
+      <div class="map-bottom">
+        <p><span aria-hidden="true">✦</span> <span data-i18n="mapTip">Yanıp sönen noktalar kurtarılmayı bekleyen sinyallerdir.</span></p>
+        <button class="secondary-btn" id="finale-btn" type="button" disabled><span data-i18n="finaleLocked">Final sinyali kilitli · 5/5</span> <span aria-hidden="true">✧</span></button>
+      </div>
+    </section>
+
+    <section class="screen mission-screen" id="mission-screen" aria-labelledby="mission-title">
+      <div class="mission-topline">
+        <button type="button" class="back-btn" id="back-map-btn"><span aria-hidden="true">←</span> <span data-i18n="backToMap">Haritaya dön</span></button>
+        <div class="mission-identity"><span id="mission-location">MOON · 1971</span><strong id="mission-title">Lazer Köprüsü</strong></div>
+        <div class="mission-goal"><span data-i18n="goal">HEDEF</span><strong id="goal-text">0 / 3</strong></div>
+      </div>
+      <div class="game-shell">
+        <canvas id="game-canvas" width="960" height="540" role="img" aria-label="Interactive mission game"></canvas>
+        <div class="game-scanlines" aria-hidden="true"></div>
+        <div class="game-corner corner-tl" aria-hidden="true"></div><div class="game-corner corner-tr" aria-hidden="true"></div>
+        <div class="game-corner corner-bl" aria-hidden="true"></div><div class="game-corner corner-br" aria-hidden="true"></div>
+        <div class="game-overlay" id="game-intro">
+          <span class="mission-icon" id="mission-icon">☾</span>
+          <p class="eyebrow" data-i18n="memorySimulation">HAFIZA SİMÜLASYONU</p>
+          <h2 id="game-intro-title">Lazer Köprüsü</h2>
+          <p id="game-intro-copy"></p>
+          <div class="control-hints" id="control-hints"></div>
+          <button class="primary-btn" id="launch-mission-btn" type="button"><span data-i18n="launch">Simülasyonu Başlat</span><span aria-hidden="true">▶</span></button>
+        </div>
+        <div class="toast" id="game-toast" role="status" aria-live="polite"></div>
+      </div>
+      <div class="touch-controls" aria-label="Game controls">
+        <button type="button" id="control-left" aria-label="Left">←</button>
+        <button type="button" id="control-up" aria-label="Up">↑</button>
+        <button type="button" id="control-down" aria-label="Down">↓</button>
+        <button type="button" id="control-right" aria-label="Right">→</button>
+        <button type="button" class="action-control" id="control-action"><span data-i18n="action">EYLEM</span><small>SPACE</small></button>
+      </div>
+      <div class="mission-caption"><span class="live-dot" aria-hidden="true"></span><p id="mission-caption-text"></p></div>
+    </section>
+
+    <section class="screen archive-screen" id="archive-screen" aria-labelledby="archive-title">
+      <div class="section-heading archive-heading">
+        <div>
+          <p class="eyebrow"><span aria-hidden="true">▦</span> <span data-i18n="museumLabel">KOZMİK MÜZE</span></p>
+          <h2 id="archive-title" data-i18n="museumTitle">Sessiz kaşifler, canlı miraslar.</h2>
+          <p data-i18n="museumCopy">Görevleri tamamlayarak anı kapsüllerini aç. Her karttaki gerçek bilgi NASA görev kayıtlarına dayanır.</p>
+        </div>
+        <button class="secondary-btn" id="archive-map-btn" type="button"><span aria-hidden="true">←</span> <span data-i18n="backToMap">Haritaya dön</span></button>
+      </div>
+      <div class="museum-filter" role="group" aria-label="Museum filters">
+        <button type="button" class="filter-btn active" data-filter="all" data-i18n="all">Tümü</button>
+        <button type="button" class="filter-btn" data-filter="moon" data-i18n="moon">Ay</button>
+        <button type="button" class="filter-btn" data-filter="mars" data-i18n="mars">Mars</button>
+        <button type="button" class="filter-btn" data-filter="deep" data-i18n="deepSpace">Derin Uzay</button>
+      </div>
+      <div class="museum-grid" id="museum-grid"></div>
+    </section>
+
+    <section class="screen finale-screen" id="finale-screen" aria-labelledby="finale-title">
+      <div class="constellation" aria-hidden="true" id="constellation"></div>
+      <div class="finale-copy">
+        <p class="eyebrow"><span aria-hidden="true">✦</span> <span data-i18n="networkRestored">KOZMİK HAFIZA AĞI ONARILDI</span></p>
+        <h2 id="finale-title"><span data-i18n="theyOpened">Onlar yolu açtı.</span><em data-i18n="youAreNext">Sıradaki keşif senin.</em></h2>
+        <p data-i18n="finaleCopy">Beş sessiz kaşifin anıları artık yıldızlar arasında ışıldıyor. Makineler durabilir; merak yolculuğuna devam eder.</p>
+        <blockquote id="final-quote" data-i18n="finalQuote">“Bizi hatırladığın sürece, hiçbir sinyal gerçekten kaybolmaz.”</blockquote>
+        <div class="certificate-maker">
+          <label for="explorer-name" data-i18n="yourName">Kâşif adın</label>
+          <div><input id="explorer-name" maxlength="28" placeholder="Adını yaz"><button class="primary-btn" id="make-certificate" type="button" data-i18n="makeCertificate">Sertifikayı Oluştur</button></div>
+        </div>
+        <div class="final-actions"><button class="secondary-btn" id="final-map-btn" type="button" data-i18n="visitMap">Haritayı yeniden ziyaret et</button><button class="text-btn" id="reset-btn" type="button" data-i18n="resetProgress">İlerlemeyi sıfırla</button></div>
+      </div>
+      <div class="final-piko" aria-hidden="true">✦</div>
+    </section>
+  </main>
+
+  <dialog class="story-dialog" id="story-dialog" aria-labelledby="story-title">
+    <div class="dialog-space" aria-hidden="true"></div>
+    <button class="dialog-close" type="button" data-close-dialog aria-label="Kapat / Close">×</button>
+    <div class="transmission-head"><span class="transmission-avatar" id="story-avatar">☾</span><div><span class="radio-label" data-i18n="memoryTransmission">ANI SİNYALİ ALINDI</span><h2 id="story-title">LRV</h2></div><div class="waveform" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+    <div class="story-body">
+      <p class="story-quote" id="story-quote"></p>
+      <div class="fact-card"><span class="fact-icon" aria-hidden="true">⌁</span><div><strong data-i18n="missionFact">GÖREV GERÇEĞİ</strong><p id="story-fact"></p><a id="story-source" href="#" target="_blank" rel="noopener"><span data-i18n="readNasa">NASA kaynağını aç</span> ↗</a></div></div>
+      <p class="story-note"><span aria-hidden="true">✎</span> <span data-i18n="creativeNote">Konuşmalar yaratıcı bir hafıza simülasyonudur; bilgi kartları doğrulanmış görev gerçeklerini sunar.</span></p>
+    </div>
+    <button class="primary-btn full-btn" id="to-quiz-btn" type="button"><span data-i18n="continueQuiz">Bilim sorusuna geç</span><span aria-hidden="true">→</span></button>
+  </dialog>
+
+  <dialog class="quiz-dialog" id="quiz-dialog" aria-labelledby="quiz-title">
+    <button class="dialog-close" type="button" data-close-dialog aria-label="Kapat / Close">×</button>
+    <p class="eyebrow"><span aria-hidden="true">✦</span> <span data-i18n="scienceCheck">BİLİM KONTROLÜ</span></p>
+    <h2 id="quiz-title"></h2>
+    <div class="quiz-options" id="quiz-options"></div>
+    <div class="quiz-feedback" id="quiz-feedback" role="status" aria-live="polite"></div>
+    <button class="primary-btn full-btn hidden" id="finish-mission-btn" type="button"><span data-i18n="collectSparks">Kıvılcımları Topla</span><span aria-hidden="true">✦ +3</span></button>
+  </dialog>
+
+  <dialog class="how-dialog" id="how-dialog" aria-labelledby="how-title">
+    <button class="dialog-close" type="button" data-close-dialog aria-label="Kapat / Close">×</button>
+    <p class="eyebrow"><span aria-hidden="true">◎</span> <span data-i18n="fieldGuide">PIKO’NUN SAHA REHBERİ</span></p>
+    <h2 id="how-title" data-i18n="howTitle">Bir sinyal nasıl kurtarılır?</h2>
+    <div class="how-grid">
+      <article><span>01</span><div><h3 data-i18n="how1Title">Bir kaşif seç</h3><p data-i18n="how1Copy">Canlı haritadaki beş sinyalden birine dokun.</p></div></article>
+      <article><span>02</span><div><h3 data-i18n="how2Title">Bilimi oyna</h3><p data-i18n="how2Copy">Her aracın gerçek görevinden esinlenen kısa oyunu tamamla.</p></div></article>
+      <article><span>03</span><div><h3 data-i18n="how3Title">Anıyı dinle</h3><p data-i18n="how3Copy">Kaşifin yaratıcı radyo günlüğünü ve doğrulanmış bilgi kartını aç.</p></div></article>
+      <article><span>04</span><div><h3 data-i18n="how4Title">Mirası birleştir</h3><p data-i18n="how4Copy">Beş görevi tamamla, final takımyıldızını aydınlat.</p></div></article>
+    </div>
+    <p class="keyboard-note"><kbd>←</kbd><kbd>↑</kbd><kbd>↓</kbd><kbd>→</kbd> / <kbd>WASD</kbd> + <kbd>SPACE</kbd> · <span data-i18n="touchReady">Dokunmatik ekranla da oynanır.</span></p>
+    <button class="primary-btn full-btn" id="how-start-btn" type="button" data-i18n="understood">Hazırım!</button>
+  </dialog>
+
+  <dialog class="certificate-dialog" id="certificate-dialog" aria-labelledby="certificate-title">
+    <button class="dialog-close no-print" type="button" data-close-dialog aria-label="Kapat / Close">×</button>
+    <div class="certificate" id="certificate">
+      <div class="certificate-stars" aria-hidden="true">✦ · ✧ · ✦</div>
+      <p data-i18n="certificateTop">KOZMİK HAFIZA AĞI</p>
+      <h2 id="certificate-title" data-i18n="certificateTitle">Hafıza Koruyucusu Sertifikası</h2>
+      <p data-i18n="certificateAwarded">Bu sertifika, beş robotik kaşifin bilimsel mirasını başarıyla uyandıran</p>
+      <strong id="certificate-name">Kâşif</strong>
+      <p data-i18n="certificateText">adlı meraklı kâşife gururla verilmiştir.</p>
+      <div class="certificate-badges"><span>☾</span><span>▰</span><span>⌁</span><span>✦</span><span>◉</span></div>
+      <footer><span>SIGNAL SEEKERS // 2060</span><span data-i18n="pikoSignature">Piko’nun dijital imzası ✦</span></footer>
+    </div>
+    <button class="primary-btn full-btn no-print" id="print-certificate" type="button"><span data-i18n="printSave">Yazdır / PDF olarak kaydet</span><span aria-hidden="true">↗</span></button>
+  </dialog>
+
+  <div class="confetti-layer" id="confetti" aria-hidden="true"></div>
+  <div class="sr-only" id="announcer" aria-live="polite"></div>
+
+  <script src="game.js"></script>
+</body>
+</html>
+
